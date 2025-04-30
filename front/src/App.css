@@ -1,0 +1,42 @@
+/* App.css */
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px; /* Ajoute un espacement sous le titre */
+}
+
+nav {
+  text-align: center; /* Centre les liens de navigation */
+  margin-bottom: 20px; /* Ajoute un espacement sous la barre de navigation */
+}
+
+.nav-link {
+  color: #61dafb;
+  margin: 0 15px; /* Ajoute un espacement horizontal entre les liens */
+  text-decoration: none; /* Supprime le soulignement par défaut */
+}
+
+.nav-link:hover {
+  text-decoration: underline; /* Ajoute un soulignement au survol */
+}
+
+/* Autres styles existants */
+.App {
+  text-align: center;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}

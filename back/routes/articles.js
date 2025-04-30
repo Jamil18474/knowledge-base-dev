@@ -17,17 +17,21 @@ router.get('/', async (req, res) => {
     }
 });
 
-
-// Récupérer les articles par thème
-router.get('/theme/:themeId', async (req, res) => {
-    const { themeId } = req.params;
+// Récupérer un article par ID
+router.get('/:id', async (req, res) => {
     try {
-        const articles = await Article.find({ theme: themeId }).populate('theme'); // Utilisez populate pour obtenir les détails du thème
-        res.json(articles);
+        const article = await Article.findById(req.params.id).populate('theme'); // Utilisez populate pour obtenir les détails du thème
+        if (!article) {
+            return res.status(404).json({ message: 'Article non trouvé' });
+        }
+        res.json(article);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 });
+
+
+
 
 
 // Ajouter un nouvel article
@@ -137,7 +141,16 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
-
+// Récupérer les articles par thème
+router.get('/theme/:themeId', async (req, res) => {
+    const { themeId } = req.params;
+    try {
+        const articles = await Article.find({ theme: themeId }).populate('theme'); // Utilisez populate pour obtenir les détails du thème
+        res.json(articles);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
 
 
 module.exports = router;
