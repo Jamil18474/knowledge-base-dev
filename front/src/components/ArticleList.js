@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
-const ArticleList = ({ token }) => {
+const ArticleList = ({ token, userRole }) => {
     const [articles, setArticles] = useState([]);
     const [themes, setThemes] = useState([]);
     const [selectedTheme, setSelectedTheme] = useState(null);
@@ -99,10 +99,14 @@ const ArticleList = ({ token }) => {
                     <div key={article._id} style={{ border: '1px solid #ccc', padding: '10px', marginBottom: '10px' }}>
                         <h4>{article.title}</h4>
                         <p>{article.content.substring(0, 100)}...</p>
-                        {token && (
+                        {userRole === 'admin' && (
                             <>
                                 <Link to={`/edit-article/${article._id}`}>Modifier</Link>
                                 <button onClick={() => handleDelete(article._id)}>Supprimer</button>
+                            </>
+                        )}
+                        {token && (
+                            <>
                                 {!favorites.includes(article._id) ? (
                                     <button onClick={() => handleFavorite(article._id)}>Ajouter aux Favoris</button>
                                 ) : (

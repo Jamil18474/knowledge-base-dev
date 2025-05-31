@@ -14,6 +14,18 @@ router.get('/', async (req, res) => {
     }
 });
 
+// Récupérer un thème par ID
+router.get('/:id', async (req, res) => {
+    try {
+        const theme = await Theme.findById(req.params.id).populate('articles');
+        if (!theme) {
+            return res.status(404).json({ message: 'Thème non trouvé' });
+        }
+        res.json(theme);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
 
 // Ajouter un nouveau thème
 router.post('/', authorize(['admin']),async (req, res) => {
@@ -21,10 +33,10 @@ router.post('/', authorize(['admin']),async (req, res) => {
     if (!name) {
         return res.status(400).json({ message: 'Le nom du thème est requis.' });
     }
-    const theme = new Theme({ name });
+    const newtheme = new Theme({ name });
     try {
-        const newTheme = await theme.save();
-        res.status(201).json(newTheme);
+        const updatedTheme = await newTheme.save();
+        res.status(201).json(updatedTheme);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
@@ -33,7 +45,6 @@ router.post('/', authorize(['admin']),async (req, res) => {
 
 // Modifier un thème
 router.put('/:id', authorize(['admin']),async (req, res) => {
-    const { id } = req.params;
     const { name } = req.body;
 
     // Vérification de la présence du nom
@@ -48,11 +59,11 @@ router.put('/:id', authorize(['admin']),async (req, res) => {
             return res.status(404).json({ message: 'Thème non trouvé.' });
         }
 
-        // Mise à jour du thème
-        const updatedTheme = await Theme.findByIdAndUpdate(id, { name }, { new: true });
+        theme.name = name;
 
-        // Renvoi du thème mis à jour
+        const updatedTheme = await theme.save();
         res.json(updatedTheme);
+
     } catch (error) {
         // Gestion des erreurs
         res.status(400).json({ message: error.message });
@@ -73,8 +84,7 @@ router.delete('/:id',authorize(['admin']), async (req, res) => {
         // Supprimer tous les articles associés au thème
         await Article.deleteMany({ theme: id });
 
-        // Supprimer le thème
-        const deletedTheme = await Theme.findByIdAndDelete(id);
+         await Theme.findByIdAndDelete(id);
         res.json({ message: 'Thème supprimé' });
     } catch (error) {
         res.status(500).json({ message: error.message });

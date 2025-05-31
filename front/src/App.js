@@ -52,8 +52,7 @@ const App = () => {
                 <Routes>
                     <Route path="/" element={
                         <>
-                            <ArticleList token={token} />
-                            <Chatbot />
+                            <ArticleList token={token} userRole = {userRole} />
                         </>
                     } />
                     <Route path="/create-article" element={<ArticleForm token={token} />} />
@@ -65,6 +64,7 @@ const App = () => {
                     <Route path="/login" element={<Login setToken={setToken} />} />
                     <Route path="/favorites" element={<Favorites token={token} />} />
                 </Routes>
+                <Chatbot />
             </div>
         </Router>
     );
