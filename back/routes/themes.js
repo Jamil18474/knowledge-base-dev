@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Theme = require('../models/Theme');
 const Article = require('../models/Article');
+const authorize = require("../middleware/authorize");
 
 // Récupérer tous les thèmes avec leurs articles associés
 router.get('/', async (req, res) => {
@@ -15,7 +16,7 @@ router.get('/', async (req, res) => {
 
 
 // Ajouter un nouveau thème
-router.post('/', async (req, res) => {
+router.post('/', authorize(['admin']),async (req, res) => {
     const { name } = req.body;
     if (!name) {
         return res.status(400).json({ message: 'Le nom du thème est requis.' });
@@ -31,7 +32,7 @@ router.post('/', async (req, res) => {
 
 
 // Modifier un thème
-router.put('/:id', async (req, res) => {
+router.put('/:id', authorize(['admin']),async (req, res) => {
     const { id } = req.params;
     const { name } = req.body;
 
@@ -59,7 +60,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // Supprimer un thème
-router.delete('/:id', async (req, res) => {
+router.delete('/:id',authorize(['admin']), async (req, res) => {
     const { id } = req.params;
 
     try {

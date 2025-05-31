@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Article = require('../models/Article');
 const Theme = require('../models/Theme');
-
+const authorize = require('../middleware/authorize');
 
 
 
@@ -35,7 +35,7 @@ router.get('/:id', async (req, res) => {
 
 
 // Ajouter un nouvel article
-router.post('/', async (req, res) => {
+router.post('/', authorize(['admin']),async (req, res) => {
     const { title, content, themeId } = req.body;
 
     // Vérifier que le titre et le contenu ne sont pas vides
@@ -64,7 +64,7 @@ router.post('/', async (req, res) => {
 });
 
 // Mettre à jour un article
-router.put('/:id', async (req, res) => {
+router.put('/:id', authorize(['admin']),async (req, res) => {
     const { title, content, themeId } = req.body;
 
     // Vérification de la présence du titre et du contenu
@@ -116,7 +116,7 @@ router.put('/:id', async (req, res) => {
 
 
 // Supprimer un article
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authorize(['admin']),async (req, res) => {
     const { id } = req.params;
 
     try {
